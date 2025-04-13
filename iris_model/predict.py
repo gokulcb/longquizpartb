@@ -20,7 +20,12 @@ iris_pipe = load_pipeline(file_name = pipeline_file_name)
 def make_prediction(*, input_data: Union[pd.DataFrame, dict]) -> dict:
     """Make a prediction using a saved model """
     
-    validated_data, errors = validate_inputs(input_df = pd.DataFrame(input_data))
+    if isinstance(input_data, dict):
+        input_df = pd.DataFrame(input_data)
+    else:
+        input_df = input_data  # Assume it's already a DataFrame
+    
+    validated_data, errors = validate_inputs(input_df = input_df)
     results = {"predictions": None, "version": _version, "errors": errors}
       
     if not errors:

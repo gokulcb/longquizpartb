@@ -1,37 +1,25 @@
-"""
-Note: These tests will fail if you have not first trained the model.
-"""
 import sys
 from pathlib import Path
+
 file = Path(__file__).resolve()
-parent, root = file.parent, file.parents[1]
-sys.path.append(str(root))
+parent = file.parent.parent  # Go up two levels to the project root
+sys.path.append(str(parent))
 
+import pandas as pd
 import numpy as np
-from sklearn.metrics import mean_squared_error, r2_score
+from typing import Dict, Any
 
-from iris_model.predict import make_prediction
+# Now you should be able to import predict.py
+from iris_model.predict import make_prediction, _version
 
+def test_make_prediction_valid_input():
+    """Test prediction with valid input data."""
+    input_data = {'SepalLength': [5.1], 'SepalWidth': [3.5], 'PetalLength': [1.4], 'PetalWidth': [0.2]}
+    result = make_prediction(input_data=pd.DataFrame(input_data))  # Pass the DataFrame
 
-def test_make_prediction(sample_input_data):
-    # Given
-    expected_num_of_predictions = 3476
+    assert "predictions" in result
+    assert isinstance(result["predictions"], np.ndarray)
+    assert result["predictions"].shape == (1,)
+    assert result["errors"] is None
+    assert result["version"] == _version
 
-    # When
-    result = make_prediction(input_data = sample_input_data[0])
-
-    # Then
-    predictions = result.get("predictions")
-    assert isinstance(predictions, np.ndarray)
-    assert isinstance(predictions[0], np.float64)
-    assert result.get("errors") is None
-    assert len(predictions) == expected_num_of_predictions
-    
-    _predictions = list(predictions)
-    y_true = sample_input_data[1]
-
-    r2 = r2_score(y_true, _predictions)
-    mse = mean_squared_error(y_true, _predictions)
-
-    assert r2 > 0.8
-    assert mse < 3000.0

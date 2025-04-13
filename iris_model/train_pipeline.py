@@ -24,10 +24,10 @@ def run_training() -> None:
     data = load_dataset(file_name = config.app_config_.training_data_file)
     
     # Features
-    X = data[config.model_config_.features].values
+    X = data[config.model_config_.features]
     
     # Apply the mapping to the target variable BEFORE the pipeline
-    Y = data[config.model_config_.target].values
+    Y = data[config.model_config_.target]
     
     # For example encoding target feature y
     enc = LabelEncoder()
