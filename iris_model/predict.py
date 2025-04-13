@@ -11,9 +11,7 @@ import numpy as np
 from iris_model import __version__ as _version
 from iris_model.config.core import config
 from iris_model.processing.data_manager import load_pipeline
-from iris_model.processing.data_manager import pre_pipeline_preparation
 from iris_model.processing.validation import validate_inputs
-
 
 pipeline_file_name = f"{config.app_config_.pipeline_save_file}{_version}.pkl"
 iris_pipe = load_pipeline(file_name = pipeline_file_name)
@@ -23,11 +21,6 @@ def make_prediction(*, input_data: Union[pd.DataFrame, dict]) -> dict:
     """Make a prediction using a saved model """
     
     validated_data, errors = validate_inputs(input_df = pd.DataFrame(input_data))
-    
-    #validated_data = validated_data.reindex(columns = ['dteday', 'season', 'hr', 'holiday', 'weekday', 'workingday', 
-    #                                                   'weathersit', 'temp', 'atemp', 'hum', 'windspeed', 'yr', 'mnth'])
-    validated_data = validated_data.reindex(columns = config.model_config_.features)
-    
     results = {"predictions": None, "version": _version, "errors": errors}
       
     if not errors:
@@ -41,7 +34,5 @@ def make_prediction(*, input_data: Union[pd.DataFrame, dict]) -> dict:
 
 if __name__ == "__main__":
 
-    data_in = {'dteday': ['2012-11-6'], 'season': ['winter'], 'hr': ['6pm'], 'holiday': ['No'], 'weekday': ['Tue'],
-               'workingday': ['Yes'], 'weathersit': ['Clear'], 'temp': [16], 'atemp': [17.5], 'hum': [30], 'windspeed': [10]}
-
-    make_prediction(input_data = data_in)
+    data_in = {'SepalLength': [5.9], 'SepalWidth': [3], 'PetalLength': [5.1], 'PetalWidth': [1.8]}
+    results = make_prediction(input_data = data_in)

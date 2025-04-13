@@ -10,16 +10,12 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 from pydantic import BaseModel, ValidationError
-
 from iris_model.config.core import config
-from iris_model.processing.data_manager import pre_pipeline_preparation
 
 
 def validate_inputs(*, input_df: pd.DataFrame) -> Tuple[pd.DataFrame, Optional[dict]]:
     """Check model inputs for unprocessable values."""
-
-    pre_processed = pre_pipeline_preparation(data_frame = input_df)
-    validated_data = pre_processed[config.model_config_.features].copy()
+    validated_data = input_df[config.model_config_.features].copy()
     errors = None
 
     try:
@@ -34,20 +30,11 @@ def validate_inputs(*, input_df: pd.DataFrame) -> Tuple[pd.DataFrame, Optional[d
 
 
 class DataInputSchema(BaseModel):
-    dteday: Optional[Union[str, datetime]]
-    season: Optional[str]
-    hr: Optional[str]
-    holiday: Optional[str]
-    weekday: Optional[str]
-    workingday: Optional[str]
-    weathersit: Optional[str]
-    temp: Optional[float]
-    atemp: Optional[float]
-    hum: Optional[float]
-    windspeed: Optional[float]
-    yr: Optional[int]
-    mnth: Optional[str]
-
+    SepalLength: Optional[float]
+    SepalWidth: Optional[float]
+    PetalLength: Optional[float]
+    PetalWidth: Optional[float]
+    
 
 class MultipleDataInputs(BaseModel):
     inputs: List[DataInputSchema]
