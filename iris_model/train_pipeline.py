@@ -24,10 +24,10 @@ def run_training() -> None:
     data = load_dataset(file_name = config.app_config_.training_data_file)
     
     # Features
-    X = data.iloc[:, :4].values
+    X = data[config.model_config_.features].values
     
     # Apply the mapping to the target variable BEFORE the pipeline
-    Y = data['Name'].values
+    Y = data[config.model_config_.target].values
     
     # For example encoding target feature y
     enc = LabelEncoder()
@@ -48,9 +48,9 @@ def run_training() -> None:
     y_pred = iris_pipe.predict(X_test)
 
     # Calculate the score/error
-    print("Precision:", round(precision_score(y_test, y_pred, average="macro"), 2))
-    print("Recall:", round(recall_score(y_test, y_pred, average="macro"), 2))
-    print("F1 score:", round(f1_score(y_test, y_pred, average="macro"), 2))
+    print("Precision:", round(precision_score(y_test, y_pred, average=config.model_config_.evaluation_average), 2))
+    print("Recall:", round(recall_score(y_test, y_pred, average=config.model_config_.evaluation_average), 2))
+    print("F1 score:", round(f1_score(y_test, y_pred, average=config.model_config_.evaluation_average), 2))
 
     # persist trained model
     save_pipeline(pipeline_to_persist = iris_pipe)

@@ -52,6 +52,7 @@ class ModelConfig(BaseModel):
     
     test_size:float
     random_state: int
+    evaluation_average: str
     criterion: str
     max_depth: int
 

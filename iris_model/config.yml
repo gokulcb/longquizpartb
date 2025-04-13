@@ -35,6 +35,7 @@ test_size: 0.20
 
 # Set the random seed
 random_state: 42
+evaluation_average: macro
 
 # Alogrithm parameters
 criterion: entropy
