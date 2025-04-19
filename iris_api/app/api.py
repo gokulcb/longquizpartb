@@ -36,19 +36,10 @@ def health() -> dict:
 example_input = {
     "inputs": [
         {
-            "dteday": "2012-11-05", # datetime.datetime.strptime("2012-11-05", "%Y-%m-%d"),  
-            "season": "winter", 
-            "hr": "6am",
-            "holiday": "No", 
-            "weekday": "Mon",
-            "workingday": "Yes",
-            "weathersit": "Mist",
-            "temp": 6.10,
-            "atemp": 3.0014,
-            "hum": 19.0012,	
-            "windspeed": 19.0012,
-            "yr": 2012,
-            "mnth": "November",
+            "SepalLength": 5.9,   
+            "SepalWidth": 3, 
+            "PetalLength": 5.1,
+            "PetalWidth": 1.8
         }
     ]
 }
@@ -57,7 +48,7 @@ example_input = {
 @api_router.post("/predict", response_model=schemas.PredictionResults, status_code=200)
 async def predict(input_data: schemas.MultipleDataInputs = Body(..., example=example_input)) -> Any:
     """
-    Bike rental count prediction with the iris_model
+    Iris species prediction with the iris_model
     """
 
     input_df = pd.DataFrame(jsonable_encoder(input_data.inputs))
